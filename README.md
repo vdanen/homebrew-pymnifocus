@@ -1,4 +1,4 @@
-# Homebrew Tao: pymnifocus
+# Homebrew Tap: pymnifocus
 
 Homebrew formula for [pymnifocus](https://github.com/vdanen/pymnifocus) - CLI and MCP server to interact with OmniFocus. LLMs can interface with tasks and projects via MCP and natural language commands, or you can interact with OmniFocus with no AI through a CLI tool.
 
