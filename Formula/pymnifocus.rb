@@ -7,6 +7,10 @@ class Pymnifocus < Formula
   sha256 "46409247794684ed98de127ef4b876e48fc35ba2e0383717120d27a2c819ed8f"
   license "MIT"
 
+  depends_on "maturin" => :build
+  depends_on "pkg-config" => :build
+  depends_on "rust" => :build
+  depends_on "openssl@3"
   depends_on "python@3.13"
   depends_on :macos
 
@@ -191,7 +195,21 @@ class Pymnifocus < Formula
   end
 
   def install
-    virtualenv_install_with_resources
+    venv = virtualenv_create(libexec, "python3.13")
+
+    # cryptography requires maturin/Rust to build from source;
+    # disable build isolation so it finds system maturin and venv cffi
+    venv.pip_install resource("pycparser")
+    venv.pip_install resource("cffi")
+    venv.pip_install(resource("cryptography"), build_isolation: false)
+
+    resources.each do |r|
+      next if ["cryptography", "cffi", "pycparser"].include?(r.name)
+
+      venv.pip_install r
+    end
+
+    venv.pip_install_and_link buildpath
     man1.install Dir["man/man1/*.1"]
   end
 
