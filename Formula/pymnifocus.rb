@@ -1,6 +1,4 @@
 class Pymnifocus < Formula
-  include Language::Python::Virtualenv
-
   desc "OmniFocus MCP server and CLI tool for macOS task management"
   homepage "https://github.com/vdanen/pymnifocus"
   url "https://files.pythonhosted.org/packages/source/p/pymnifocus/pymnifocus-0.1.tar.gz"
@@ -13,9 +11,11 @@ class Pymnifocus < Formula
   skip_clean "libexec"
 
   def install
-    virtualenv_create(libexec, "python3.13")
+    python3 = Formula["python@3.13"].opt_bin/"python3.13"
+    system python3, "-m", "venv", "--clear", libexec
     ENV.delete("PIP_NO_BINARY")
     ENV.delete("PIP_REQUIRE_HASHES")
+    system libexec/"bin/pip", "install", "--upgrade", "pip"
     system libexec/"bin/pip", "install", "."
     bin.install_symlink Dir[libexec/"bin/pymnifocus-*"]
     man1.install Dir[buildpath/"man/man1/*.1"] if (buildpath/"man/man1").exist?
