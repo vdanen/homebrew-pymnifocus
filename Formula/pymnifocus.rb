@@ -11,8 +11,8 @@ class Pymnifocus < Formula
   depends_on :macos
 
   def install
-    venv = virtualenv_create(libexec, "python3.13")
-    venv.pip_install buildpath
+    virtualenv_create(libexec, "python3.13")
+    system libexec/"bin/pip", "install", *std_pip_args(build_isolation: true), "."
     bin.install_symlink Dir[libexec/"bin/pymnifocus-*"]
     man1.install Dir["man/man1/*.1"]
   end
