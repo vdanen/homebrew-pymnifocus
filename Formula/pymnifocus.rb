@@ -12,7 +12,7 @@ class Pymnifocus < Formula
 
   def install
     virtualenv_create(libexec, "python3.13")
-    system libexec/"bin/pip", "install", *std_pip_args(build_isolation: true), "."
+    system libexec/"bin/pip", "install", "--verbose", "."
     bin.install_symlink Dir[libexec/"bin/pymnifocus-*"]
     man1.install Dir["man/man1/*.1"]
   end
